@@ -15,30 +15,50 @@ C'est **« ça marche ET ça a l'air conçu par un excellent designer ».**
 
 ## Installation
 
+Le studio s'installe différemment selon la façon dont tu utilises Claude Code.
+
+### Depuis le navigateur (claude.ai)
+
+Chaque session web démarre sur une machine neuve : rien ne persiste d'une fois sur
+l'autre. Le studio doit donc **voyager avec les dépôts**. Deux façons de faire :
+
+**A — attacher ce dépôt à la session.** Dans une session ouverte sur ton projet, écris :
+
+> ajoute le dépôt `design-studio` et charge le studio
+
+Claude l'attache, et les 6 Skills, la commande `/design` et la doctrine deviennent actifs
+pour cette session. À refaire à chaque nouvelle session — mais c'est une phrase.
+
+**B — installer le studio dans le dépôt du projet (recommandé pour un projet suivi).**
+Une seule fois, dans une session ouverte sur ce dépôt et sur ton projet :
+
+> installe le studio dans le dépôt `<mon-projet>`
+
+Claude copie les Skills dans `.claude/skills/`, la commande dans `.claude/commands/`, et
+crée un `CLAUDE.md` portant la doctrine et le contexte du projet, puis pousse le tout.
+Ensuite, **plus rien à faire** : toute session ouverte sur ce dépôt a le studio.
+
+### Depuis un terminal
+
 ```bash
 git clone https://github.com/ria8733/design-studio.git ~/design-studio
 cd ~/design-studio && ./install.sh
 ```
 
-Ça place dans `~/.claude/` :
+Place les Skills, la commande et la doctrine dans `~/.claude/` — actifs dans tous les
+projets de la machine, sans rien à refaire.
 
-| Quoi | Où | Effet |
-|---|---|---|
-| 6 Skills | `~/.claude/skills/` | se déclenchent seuls dès que tu parles design, dans n'importe quel projet |
-| Commande `/design` | `~/.claude/commands/` | lance la boucle complète en 8 passes |
-| Doctrine | `~/.claude/CLAUDE.md` | règles permanentes, injectées entre marqueurs sans toucher au reste du fichier |
+Autres commandes : `--link` (liens symboliques, suit le dépôt) · `--status` (état) ·
+`--uninstall` (retrait propre, restaure ton `CLAUDE.md` à l'identique) ·
+`--init <dir>` (équipe un projet précis, c'est ce que fait l'option B ci-dessus).
 
-Playwright est requis par la QA visuelle :
+### Playwright
+
+Requis par la QA visuelle. En session web il est déjà là. En local :
 
 ```bash
 npm i -g playwright && npx playwright install chromium
 ```
-
-**Autres commandes** — `./install.sh --link` (liens symboliques, suit le dépôt) ·
-`--status` (état de l'installation) · `--uninstall` (retrait propre, restaure ton
-`CLAUDE.md` à l'identique) · `--init <dir>` (équipe un projet, voir plus bas).
-
----
 
 ## Usage
 
@@ -159,10 +179,11 @@ plugins `figma` et `design` du catalogue. Voir `docs/AUDIT-ENVIRONNEMENT.md`.
 ```
 design-studio/
 ├── install.sh                 installation globale, --init, --status, --uninstall
-├── doctrine.md                injecté dans ~/.claude/CLAUDE.md
-├── skills/                    les 6 Skills
-│   └── visual-qa/scripts/shoot.mjs
-├── commands/design.md         la commande /design
+├── CLAUDE.md                  la doctrine (s'applique si le dépôt est attaché)
+├── .claude/
+│   ├── skills/                les 6 Skills
+│   │   └── visual-qa/scripts/shoot.mjs
+│   └── commands/design.md     la commande /design
 ├── templates/                 CLAUDE.project.md · mcp.json
 └── docs/AUDIT-ENVIRONNEMENT.md
 ```

@@ -15,6 +15,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SRC="$ROOT/.claude/skills"
 CFG="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 SKILLS=(design-director design-system visual-qa anti-ai-slop landing-page game-ui)
 BEGIN_MARK="<!-- BEGIN design-studio — géré par install.sh, ne pas éditer à la main -->"
@@ -36,7 +37,7 @@ install_doctrine() {
     awk 'BEGIN{n=0} {if($0==""){n++}else{n=0} if(n<3)print}' "$tmp" > "$tmp.2" && mv "$tmp.2" "$tmp"
   fi
   [[ -s "$tmp" ]] && printf '\n' >> "$tmp"
-  { printf '%s\n' "$BEGIN_MARK"; cat "$ROOT/doctrine.md"; printf '%s\n' "$END_MARK"; } >> "$tmp"
+  { printf '%s\n' "$BEGIN_MARK"; cat "$ROOT/CLAUDE.md"; printf '%s\n' "$END_MARK"; } >> "$tmp"
   mkdir -p "$CFG"
   mv "$tmp" "$target"
   ok "doctrine        → $target (bloc design-studio)"
@@ -47,15 +48,15 @@ install_global() {
   local mode="$1"
   mkdir -p "$CFG/skills" "$CFG/commands"
   for s in "${SKILLS[@]}"; do
-    [[ -d "$ROOT/skills/$s" ]] || die "introuvable: $ROOT/skills/$s"
+    [[ -d "$SRC/$s" ]] || die "introuvable: $SRC/$s"
     rm -rf "$CFG/skills/$s"
-    if [[ "$mode" == "link" ]]; then ln -s "$ROOT/skills/$s" "$CFG/skills/$s"
-    else cp -R "$ROOT/skills/$s" "$CFG/skills/$s"; fi
+    if [[ "$mode" == "link" ]]; then ln -s "$SRC/$s" "$CFG/skills/$s"
+    else cp -R "$SRC/$s" "$CFG/skills/$s"; fi
   done
   ok "6 Skills        → $CFG/skills/  (${SKILLS[*]})"
 
-  if [[ "$mode" == "link" ]]; then ln -sf "$ROOT/commands/design.md" "$CFG/commands/design.md"
-  else cp "$ROOT/commands/design.md" "$CFG/commands/design.md"; fi
+  if [[ "$mode" == "link" ]]; then ln -sf "$ROOT/.claude/commands/design.md" "$CFG/commands/design.md"
+  else cp "$ROOT/.claude/commands/design.md" "$CFG/commands/design.md"; fi
   ok "commande        → /design"
 
   install_doctrine
@@ -81,14 +82,25 @@ init_project() {
   dir="$(cd "$dir" && pwd)"
   local name; name="$(basename "$dir")"
 
-  mkdir -p "$dir/design/brand"
+  mkdir -p "$dir/design/brand" "$dir/.claude/skills" "$dir/.claude/commands"
+
+  for s in "${SKILLS[@]}"; do
+    [[ -d "$SRC/$s" ]] || die "introuvable: $SRC/$s"
+    rm -rf "$dir/.claude/skills/$s"
+    cp -R "$SRC/$s" "$dir/.claude/skills/$s"
+  done
+  ok "6 Skills        → $dir/.claude/skills/  (voyagent avec le dépôt)"
+
+  cp "$ROOT/.claude/commands/design.md" "$dir/.claude/commands/design.md"
+  ok "commande        → /design"
+
   ok "design/brand/   → sorties DA et design system (à versionner)"
 
   if [[ -f "$dir/CLAUDE.md" ]]; then
     info "CLAUDE.md existe déjà — non écrasé. Template : $ROOT/templates/CLAUDE.project.md"
   else
     sed "s/{{PROJECT}}/$name/g" "$ROOT/templates/CLAUDE.project.md" > "$dir/CLAUDE.md"
-    ok "CLAUDE.md       → contexte projet   ⚠ section 1 À REMPLIR"
+    ok "CLAUDE.md       → doctrine + contexte projet   ⚠ section 1 À REMPLIR"
   fi
 
   if [[ -f "$dir/.mcp.json" ]]; then

@@ -1,3 +1,8 @@
+<!-- Ce fichier a deux rôles :
+     1. il est la doctrine injectée dans ~/.claude/CLAUDE.md par install.sh ;
+     2. il s'applique directement quand ce dépôt est attaché à une session
+        Claude Code (navigateur), aux côtés du dépôt de travail. -->
+
 # Design Studio — doctrine
 
 S'applique dès que le travail touche à une interface : écran, page, composant, thème,
