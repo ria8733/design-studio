@@ -159,12 +159,24 @@ function auditInPage() {
 
   const all = Array.from(document.querySelectorAll('body *')).filter(visible);
 
+  // un ancêtre qui défile horizontalement (carrousel, tableau) rend le débordement légitime
+  const inScroller = (el) => {
+    let n = el.parentElement;
+    while (n && n !== document.documentElement) {
+      const ox = getComputedStyle(n).overflowX;
+      if ((ox === 'auto' || ox === 'scroll') && n.scrollWidth > n.clientWidth + 1) return true;
+      n = n.parentElement;
+    }
+    return false;
+  };
+
   // débordements horizontaux
   for (const el of all) {
     const r = el.getBoundingClientRect();
     if (r.width > 0 && (r.right > docW + 2 || r.left < -2)) {
       const p = el.parentElement;
       if (p && p.getBoundingClientRect().right > docW + 2) continue; // ne garder que la racine du débordement
+      if (inScroller(el)) continue; // carrousel assumé, pas un défaut
       out.overflowing.push({ el: path(el), left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width) });
     }
   }
@@ -238,6 +250,7 @@ function auditInPage() {
     backdropBlurElements: blurCount,
     cardLikeBlocks: cardish,
     h1Count: document.querySelectorAll('h1').length,
+    headingElements: document.querySelectorAll('h1,h2,h3,h4,h5,h6').length,
     textNodes: document.body.innerText.trim().length,
   };
   return out;
@@ -318,14 +331,14 @@ for (const key of chosen) {
     if (arr.length > 4) console.log(`         … +${arr.length - 4}`);
   }
   const s = audit.slop;
-  console.log(`  signaux: ${s.distinctFontSizes} tailles de texte · ${s.distinctTextColors} couleurs de texte · ${s.distinctRadii} radius · ${s.distinctShadows} ombres · ${s.gradientElements} gradients · ${s.cardLikeBlocks} blocs type card · h1×${s.h1Count}`);
+  console.log(`  signaux: ${s.distinctFontSizes} tailles de texte · ${s.distinctTextColors} couleurs de texte · ${s.distinctRadii} radius · ${s.distinctShadows} ombres · ${s.gradientElements} gradients · ${s.cardLikeBlocks} blocs type card${s.headingElements ? ` · h1×${s.h1Count}` : ' · sans titres sémantiques (rendu non-HTML)'}`);
   const warn = [];
   if (s.distinctFontSizes > 10) warn.push(`échelle typo dispersée (${s.distinctFontSizes})`);
   if (s.distinctRadii > 4) warn.push(`radius incohérents (${s.distinctRadii})`);
   if (s.distinctShadows > 4) warn.push(`ombres incohérentes (${s.distinctShadows})`);
   if (s.gradientElements > 6) warn.push(`gradients en excès (${s.gradientElements})`);
   if (s.cardLikeBlocks > 12) warn.push(`mur de cards (${s.cardLikeBlocks})`);
-  if (s.h1Count !== 1) warn.push(`h1 × ${s.h1Count} (attendu : 1)`);
+  if (s.headingElements > 0 && s.h1Count !== 1) warn.push(`h1 × ${s.h1Count} (attendu : 1)`);
   if (warn.length) console.log(`  ⚠ anti-slop: ${warn.join(' · ')}`);
   console.log('');
 }
