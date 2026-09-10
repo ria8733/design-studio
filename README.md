@@ -16,16 +16,9 @@ C'est **« ça marche ET ça a l'air conçu par un excellent designer ».**
 ## Installation
 
 ```bash
-git clone -b design-studio --single-branch https://github.com/ria8733/snaff.git ~/design-studio
+git clone https://github.com/ria8733/design-studio.git ~/design-studio
 cd ~/design-studio && ./install.sh
 ```
-
-> Le studio vit pour l'instant sur une **branche indépendante** du dépôt `snaff` :
-> l'intégration GitHub utilisée pour le publier n'a pas le droit de créer un dépôt.
-> Cette branche a sa propre histoire et ne contient aucun fichier de Snaff — elle se
-> comporte exactement comme un dépôt séparé. Pour lui en donner un vrai :
-> créer un dépôt vide `design-studio` sur GitHub, puis
-> `git remote set-url origin https://github.com/<toi>/design-studio.git && git push -u origin main`.
 
 Ça place dans `~/.claude/` :
 
