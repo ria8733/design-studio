@@ -50,6 +50,9 @@ Obligatoire pour un écran, une page ou une refonte. Commande `/design`.
 
 Compressible en 4 → 5 → 7 pour un tweak isolé. Jamais pour un écran ou une page.
 
+Interface de jeu (HUD, panneau de partie, simulation) : ajouter `game-ui` après la
+pass 2 — les règles d'une interface de jeu ne sont pas celles d'une interface produit.
+
 ## Règles permanentes
 
 - **Zéro valeur arbitraire.** Couleur, taille, espacement, radius, ombre, durée : toujours

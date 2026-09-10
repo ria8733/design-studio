@@ -24,7 +24,7 @@ cd ~/design-studio && ./install.sh
 
 | Quoi | Où | Effet |
 |---|---|---|
-| 5 Skills | `~/.claude/skills/` | se déclenchent seuls dès que tu parles design, dans n'importe quel projet |
+| 6 Skills | `~/.claude/skills/` | se déclenchent seuls dès que tu parles design, dans n'importe quel projet |
 | Commande `/design` | `~/.claude/commands/` | lance la boucle complète en 8 passes |
 | Doctrine | `~/.claude/CLAUDE.md` | règles permanentes, injectées entre marqueurs sans toucher au reste du fichier |
 
@@ -59,7 +59,7 @@ Pour la boucle complète et explicite :
 
 ---
 
-## Les 5 Skills
+## Les 6 Skills
 
 | Skill | Ce qu'il fait | Se déclenche sur |
 |---|---|---|
@@ -68,6 +68,7 @@ Pour la boucle complète et explicite :
 | **visual-qa** | Ouvre réellement l'interface dans Chromium, capture en mobile / tablette / desktop, audite le DOM rendu, puis **lit** les captures | après tout build visuel · « ça donne quoi » · « teste en mobile » · « responsive » |
 | **anti-ai-slop** | Critique de directeur artistique extérieur. Exactement 5 défauts majeurs, chacun avec son remplacement concret | « ça fait générique » · « ça fait IA » · « c'est fade » · avant livraison |
 | **landing-page** | Proposition de valeur → architecture de l'info → message → storytelling → sections → build → conversion | landing page · page produit · page de vente · homepage |
+| **game-ui** | HUD, lisibilité d'un état de partie, feedback de conséquence, données de simulation sans effet tableur, ton et diégèse, game feel | interface de jeu · HUD · « ça fait tableur » · « le joueur ne comprend pas ce qui se passe » |
 
 ---
 
@@ -159,7 +160,7 @@ plugins `figma` et `design` du catalogue. Voir `docs/AUDIT-ENVIRONNEMENT.md`.
 design-studio/
 ├── install.sh                 installation globale, --init, --status, --uninstall
 ├── doctrine.md                injecté dans ~/.claude/CLAUDE.md
-├── skills/                    les 5 Skills
+├── skills/                    les 6 Skills
 │   └── visual-qa/scripts/shoot.mjs
 ├── commands/design.md         la commande /design
 ├── templates/                 CLAUDE.project.md · mcp.json

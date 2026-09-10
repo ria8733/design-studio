@@ -8,7 +8,7 @@
 #   ./install.sh --uninstall     retire l'installation globale
 #
 # L'installation globale place :
-#   ~/.claude/skills/<5 skills>    déclenchés automatiquement selon la demande
+#   ~/.claude/skills/<6 skills>    déclenchés automatiquement selon la demande
 #   ~/.claude/commands/design.md   la commande /design
 #   ~/.claude/CLAUDE.md            la doctrine, entre marqueurs, dans tous les projets
 
@@ -16,7 +16,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CFG="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
-SKILLS=(design-director design-system visual-qa anti-ai-slop landing-page)
+SKILLS=(design-director design-system visual-qa anti-ai-slop landing-page game-ui)
 BEGIN_MARK="<!-- BEGIN design-studio — géré par install.sh, ne pas éditer à la main -->"
 END_MARK="<!-- END design-studio -->"
 
@@ -52,7 +52,7 @@ install_global() {
     if [[ "$mode" == "link" ]]; then ln -s "$ROOT/skills/$s" "$CFG/skills/$s"
     else cp -R "$ROOT/skills/$s" "$CFG/skills/$s"; fi
   done
-  ok "5 Skills        → $CFG/skills/  (${SKILLS[*]})"
+  ok "6 Skills        → $CFG/skills/  (${SKILLS[*]})"
 
   if [[ "$mode" == "link" ]]; then ln -sf "$ROOT/commands/design.md" "$CFG/commands/design.md"
   else cp "$ROOT/commands/design.md" "$CFG/commands/design.md"; fi
